@@ -3,8 +3,8 @@ const JwtService = require("../services/JwtService");
 
 const createDiscount = async (req, res) => {
   try {
-    const { product, value, startDiscount, endDiscount } = req.body;
-    if (!value || !startDiscount || !endDiscount || !product) {
+    const { product, name,image, value, startDiscount, endDiscount } = req.body;
+    if (!value || !startDiscount || !endDiscount || !product || !name || !image) {
       return res.status(404).json({
         status: "ERR",
         message: "The input is required",
@@ -83,6 +83,23 @@ const updateDiscount = async (req, res) => {
     });
   }
 };
+const deleteManyDiscount = async (req, res) => {
+  try {
+    const ids = req.body.ids;
+    if (!ids) {
+      return res.status(200).json({
+        status: "ERR",
+        message: "The ids is required",
+      });
+    }
+    const response = await DiscountService.deleteManyDiscount(ids);
+    return res.status(200).json(response);
+  } catch (e) {
+    return res.status(404).json({
+      message: e,
+    });
+  }
+};
 
 module.exports = {
   createDiscount,
@@ -90,4 +107,5 @@ module.exports = {
   deleteDiscount,
   getDetailsDiscount,
   updateDiscount,
+  deleteManyDiscount
 };
